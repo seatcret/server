@@ -13,9 +13,7 @@
     {% for train in trains %}
     <li>
         <a href="{{ url_for('train', train_id=train.id) }}">{{ train.id }}번 열차</a>:
-        <a href="{{ url_for('station', station_id=train.station_id) }}">{{ train.station_name }}</a>
-        (종착역: <a
-            href="{{ url_for('station', station_id=train.terminal_station_id) }}">{{ train.terminal_station_name }}</a>)
+        {{ train.station_name }} (종착역: {{ train.terminal_station_name }})
     </li>
     {% endfor %}
 </ul>

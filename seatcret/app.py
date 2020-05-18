@@ -85,11 +85,6 @@ def train(train_id: str):
     return render_template('train.html', train=train)
 
 
-@app.route('/stations/<string:station_id>/')
-def station(station_id: str):
-    return ''
-
-
 @app.route('/seats/<string:train_id>/<int:car_number>/<int:seat_number>/')
 def seat(train_id: str, car_number: int, seat_number: int):
     url = url_for('seat', train_id=train_id,
