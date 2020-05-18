@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2>실시간 열차 위치 정보</h2>
+
+{% for name, trains in subways.items() %}
+<h3>{{ name }}</h3>
+
+{% if not trains %}
+<p>현재 운행중인 열차가 없습니다.</p>
+{% else %}
+<ul>
+    {% for train in trains %}
+    <li>
+        <a href="{{ url_for('train', train_id=train.id) }}">{{ train.id }}번 열차</a>:
+        <a href="{{ url_for('station', station_id=train.station_id) }}">{{ train.station_name }}</a>
+        (종착역: <a
+            href="{{ url_for('station', station_id=train.terminal_station_id) }}">{{ train.terminal_station_name }}</a>)
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endfor %}
+{% endblock %}

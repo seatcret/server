@@ -1,4 +1,15 @@
 [[package]]
+category = "dev"
+description = "A tool that automatically formats Python code to conform to the PEP 8 style guide"
+name = "autopep8"
+optional = false
+python-versions = "*"
+version = "1.5.2"
+
+[package.dependencies]
+pycodestyle = ">=2.5.0"
+
+[[package]]
 category = "main"
 description = "httplib2 caching for requests"
 name = "cachecontrol"
@@ -17,7 +28,6 @@ redis = ["redis (>=2.10.5)"]
 [[package]]
 category = "main"
 description = "Extensible memoizing collections and decorators"
-marker = "platform_python_implementation != \"PyPy\""
 name = "cachetools"
 optional = false
 python-versions = "~=3.5"
@@ -26,7 +36,6 @@ version = "4.1.0"
 [[package]]
 category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
-marker = "platform_python_implementation != \"PyPy\""
 name = "certifi"
 optional = false
 python-versions = "*"
@@ -35,7 +44,6 @@ version = "2020.4.5.1"
 [[package]]
 category = "main"
 description = "Universal encoding detector for Python 2 and 3"
-marker = "platform_python_implementation != \"PyPy\""
 name = "chardet"
 optional = false
 python-versions = "*"
@@ -216,7 +224,6 @@ requests = ["requests (>=2.18.0,<3.0.0dev)"]
 [[package]]
 category = "main"
 description = "Common protobufs used in Google APIs"
-marker = "platform_python_implementation != \"PyPy\""
 name = "googleapis-common-protos"
 optional = false
 python-versions = "*"
@@ -251,7 +258,6 @@ version = "0.17.3"
 [[package]]
 category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
-marker = "platform_python_implementation != \"PyPy\""
 name = "idna"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -298,7 +304,6 @@ version = "1.0.0"
 [[package]]
 category = "main"
 description = "Protocol Buffers"
-marker = "platform_python_implementation != \"PyPy\""
 name = "protobuf"
 optional = false
 python-versions = "*"
@@ -311,7 +316,6 @@ six = ">=1.9"
 [[package]]
 category = "main"
 description = "ASN.1 types and codecs"
-marker = "platform_python_implementation != \"PyPy\""
 name = "pyasn1"
 optional = false
 python-versions = "*"
@@ -320,7 +324,6 @@ version = "0.4.8"
 [[package]]
 category = "main"
 description = "A collection of ASN.1-based protocols modules."
-marker = "platform_python_implementation != \"PyPy\""
 name = "pyasn1-modules"
 optional = false
 python-versions = "*"
@@ -330,13 +333,42 @@ version = "0.2.8"
 pyasn1 = ">=0.4.6,<0.5.0"
 
 [[package]]
+category = "dev"
+description = "Python style guide checker"
+name = "pycodestyle"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.6.0"
+
+[[package]]
+category = "dev"
+description = "Add .env support to your django/flask apps in development and deployments"
+name = "python-dotenv"
+optional = false
+python-versions = "*"
+version = "0.13.0"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 category = "main"
 description = "World timezone definitions, modern and historical"
-marker = "platform_python_implementation != \"PyPy\""
 name = "pytz"
 optional = false
 python-versions = "*"
 version = "2020.1"
+
+[[package]]
+category = "main"
+description = "Python client for Redis key-value store"
+name = "redis"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "3.5.2"
+
+[package.extras]
+hiredis = ["hiredis (>=0.1.3)"]
 
 [[package]]
 category = "main"
@@ -357,9 +389,19 @@ security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
 
 [[package]]
+category = "dev"
+description = "a python refactoring library..."
+name = "rope"
+optional = false
+python-versions = "*"
+version = "0.17.0"
+
+[package.extras]
+dev = ["pytest"]
+
+[[package]]
 category = "main"
 description = "Pure-Python RSA implementation"
-marker = "platform_python_implementation != \"PyPy\""
 name = "rsa"
 optional = false
 python-versions = "*"
@@ -367,6 +409,14 @@ version = "4.0"
 
 [package.dependencies]
 pyasn1 = ">=0.1.3"
+
+[[package]]
+category = "main"
+description = "QR Code and Micro QR Code generator for Python 2 and Python 3"
+name = "segno"
+optional = false
+python-versions = "*"
+version = "1.0.0"
 
 [[package]]
 category = "main"
@@ -387,7 +437,6 @@ version = "3.0.1"
 [[package]]
 category = "main"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-marker = "platform_python_implementation != \"PyPy\""
 name = "urllib3"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
@@ -411,10 +460,13 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "bf62f7a747b4085e4fc53e8e890b6f894c990f842de698401d92ca4517445b7d"
+content-hash = "3445dbd833594019a38e82fc909af871c743b9d256e53d7889b4bd2293a66507"
 python-versions = "^3.7"
 
 [metadata.files]
+autopep8 = [
+    {file = "autopep8-1.5.2.tar.gz", hash = "sha256:152fd8fe47d02082be86e05001ec23d6f420086db56b17fc883f3f965fb34954"},
+]
 cachecontrol = [
     {file = "CacheControl-0.12.6-py2.py3-none-any.whl", hash = "sha256:10d056fa27f8563a271b345207402a6dcce8efab7e5b377e270329c62471b10d"},
     {file = "CacheControl-0.12.6.tar.gz", hash = "sha256:be9aa45477a134aee56c8fac518627e1154df063e85f67d4f83ce0ccc23688e8"},
@@ -633,17 +685,36 @@ pyasn1-modules = [
     {file = "pyasn1_modules-0.2.8-py3.6.egg", hash = "sha256:cbac4bc38d117f2a49aeedec4407d23e8866ea4ac27ff2cf7fb3e5b570df19e0"},
     {file = "pyasn1_modules-0.2.8-py3.7.egg", hash = "sha256:c29a5e5cc7a3f05926aff34e097e84f8589cd790ce0ed41b67aed6857b26aafd"},
 ]
+pycodestyle = [
+    {file = "pycodestyle-2.6.0-py2.py3-none-any.whl", hash = "sha256:2295e7b2f6b5bd100585ebcb1f616591b652db8a741695b3d8f5d28bdc934367"},
+    {file = "pycodestyle-2.6.0.tar.gz", hash = "sha256:c58a7d2815e0e8d7972bf1803331fb0152f867bd89adf8a01dfd55085434192e"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.13.0.tar.gz", hash = "sha256:3b9909bc96b0edc6b01586e1eed05e71174ef4e04c71da5786370cebea53ad74"},
+    {file = "python_dotenv-0.13.0-py2.py3-none-any.whl", hash = "sha256:25c0ff1a3e12f4bde8d592cc254ab075cfe734fc5dd989036716fd17ee7e5ec7"},
+]
 pytz = [
     {file = "pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed"},
     {file = "pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048"},
+]
+redis = [
+    {file = "redis-3.5.2-py2.py3-none-any.whl", hash = "sha256:2ef11f489003f151777c064c5dbc6653dfb9f3eade159bcadc524619fddc2242"},
+    {file = "redis-3.5.2.tar.gz", hash = "sha256:6d65e84bc58091140081ee9d9c187aab0480097750fac44239307a3bdf0b1251"},
 ]
 requests = [
     {file = "requests-2.23.0-py2.py3-none-any.whl", hash = "sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee"},
     {file = "requests-2.23.0.tar.gz", hash = "sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6"},
 ]
+rope = [
+    {file = "rope-0.17.0.tar.gz", hash = "sha256:658ad6705f43dcf3d6df379da9486529cf30e02d9ea14c5682aa80eb33b649e1"},
+]
 rsa = [
     {file = "rsa-4.0-py2.py3-none-any.whl", hash = "sha256:14ba45700ff1ec9eeb206a2ce76b32814958a98e372006c8fb76ba820211be66"},
     {file = "rsa-4.0.tar.gz", hash = "sha256:1a836406405730121ae9823e19c6e806c62bbad73f890574fff50efa4122c487"},
+]
+segno = [
+    {file = "segno-1.0.0-py2.py3-none-any.whl", hash = "sha256:a2bd4b58851335e8e652ce34641d7b6c590f0c7347aa45cf7237bcc83de4cdb9"},
+    {file = "segno-1.0.0.tar.gz", hash = "sha256:9f6abc90f10d56b8ef29b6655bff5122dae37c37647bc04098a5ae4a5900db84"},
 ]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},

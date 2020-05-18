@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2>내 정보</h2>
+<h3>프로필</h3>
+<ul>
+    <li>고유번호: {{ user.id }}</li>
+    <li>가입일: {{ created_at }}</li>
+</ul>
+<h3>여정</h3>
+{% if itinerary %}
+<ul>
+    <li>목적지: {{ itinerary.destination_name }}</li>
+    <li>착석 여부:
+        {% if itinerary.seated == "true" %}
+        앉아서 가고 있어요 🧘
+        {% else %}
+        서서 가고 있어요 🧍
+        {% endif %}
+    </li>
+    <li>현재 열차: <a href="{{ url_for('train', train_id=train.id) }}">{{ train.subway_name }} {{ train.id }}번 열차 {{ itinerary.car_number }}량</a>
+    </li>
+    <li>현재 위치: {{ train.station_name }}</li>
+</ul>
+
+<a href="{{ url_for('end_itinerary') }}">이미 지하철에서 내리셨다면?</a>
+{% else %}
+<p>현재 진행중인 여정이 없습니다.</p>
+{% endif %}
+{% endblock %}

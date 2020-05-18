@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h2>{{ train.subway_name }} {{ train.id }}번 열차</h2>
+<ul>
+    <li>현재 위치: {{ train.station_name }}</li>
+    <li>현재 상태:
+        {% if train.status == '0' %}
+        진입
+        {% elif train.status == '1' %}
+        도착
+        {% else %}
+        출발
+        {% endif %}
+    </li>
+    <li>운행 방향:
+        {% if train.subway_id == '1002' %}
+
+        {% if train.direction == '0' %}
+        내선
+        {% else %}
+        외선
+        {% endif %}
+
+        {% else %}
+
+        {% if train.direction == '0' %}
+        상행
+        {% else %}
+        하행
+        {% endif %}
+
+        {% endif %}
+    </li>
+    <li>막차:
+        {% if train.is_last == '0' %}
+        아님
+        {% else %}
+        맞음
+        {% endif %}
+    </li>
+    <li>급행:
+        {% if train.is_express == '0' %}
+        아님
+        {% else %}
+        맞음
+        {% endif %}
+    </li>
+    <li>종착역: {{ train.terminal_station_name }}</li>
+    <li>마지막 갱신 시점: {{ train.received_at }}</li>
+</ul>
+
+<h3>좌석 정보 (열차 진행 방향: ➡️)</h3>
+{% for car_number in range(1, 11) %}
+<h4>{{ car_number }}량</h4>
+<ol class='seats'>
+    {% for seat_number in range(1, 41) %}
+    <li>
+        <a href="{{ url_for('seat', train_id=train.id, car_number=car_number, seat_number=seat_number) }}">💺</a>
+    </li>
+    {% endfor %}
+</ol>
+{% endfor %}
+
+
+{% endblock %}

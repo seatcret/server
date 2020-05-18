@@ -1,0 +1,9 @@
+.seats {
+    column-count: 20;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.seats a {
+    text-decoration: none;
+}
