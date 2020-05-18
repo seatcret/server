@@ -269,4 +269,5 @@ def notify_getoff():
                 )
                 fcm_messages.append(message)
 
+    messaging.send_all([message])
     click.echo(f"[{datetime.now()}] {len(fcm_messages)} 개 FCM 알람 발송")
