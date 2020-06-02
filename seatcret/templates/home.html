@@ -3,12 +3,31 @@
 {% block main %}
 <h2>실시간 열차 위치 정보</h2>
 
-{% for name, trains in subways.items() %}
+{% for name, directions in subways.items() %}
 <h3>{{ name }}</h3>
-
+{% for direction, trains in directions.items() %}
 {% if not trains %}
 <p>현재 운행중인 열차가 없습니다.</p>
 {% else %}
+<h4>
+    {% if name == '2호선' %}
+
+    {% if direction == 0 %}
+    내선
+    {% else %}
+    외선
+    {% endif %}
+
+    {% else %}
+
+    {% if direction == 0 %}
+    상행
+    {% else %}
+    하행
+    {% endif %}
+
+    {% endif %}
+</h4>
 <ul>
     {% for train in trains %}
     <li>
@@ -18,6 +37,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-
+{% endfor %}
 {% endfor %}
 {% endblock %}

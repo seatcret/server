@@ -67,7 +67,10 @@ def home():
         for train_id in train_ids:
             train = redis.hgetall(f'train:{train_id}')
             trains.append(train)
-        subways[subway_name] = trains
+        subways[subway_name] = {
+            0: [train for train in trains if train['direction'] == '0'],
+            1: [train for train in trains if train['direction'] == '1'],
+        }
     return render_template('home.html', user=get_current_user(), subways=subways)
 
 
