@@ -198,8 +198,10 @@ def get_subway_stations(subway_id: str):
 
 @app.cli.command()
 def event_processor():
-    update_subway_location()
-    notify_getoff()
+    while True:
+        update_subway_location()
+        notify_getoff()
+        time.sleep(10)
 
 
 def update_subway_location():
