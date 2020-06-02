@@ -58,12 +58,17 @@ def register_user(platform: str, token: str):
     return user_id, redis.hgetall(f"user:{user_id}")
 
 
-def get_train_directions_for_subway(subway_id: str):
+def get_subway_trains(subway_id: str):
     train_ids = redis.smembers(f'trains:{subway_id}')
     trains = []
     for train_id in train_ids:
         train = redis.hgetall(f'train:{train_id}')
         trains.append(train)
+    return trains
+
+
+def get_train_directions_for_subway(subway_id: str):
+    trains = get_subway_trains(subway_id)
     return {
         0: [train for train in trains if train['direction'] == '0'],
         1: [train for train in trains if train['direction'] == '1'],
