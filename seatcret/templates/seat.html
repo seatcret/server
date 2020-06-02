@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block main %}
-{% if user %}
 <h2>여정 등록</h2>
 
 <form action="{{ url_for('add_itinerary') }}" method="POST">
@@ -37,8 +36,6 @@
     </div>
 </form>
 
-{% else %}
 <h2>좌석 부착용 QR 코드</h2>
 <img width="50%" src="{{ qrcode }}"></img>
-{% endif %}
 {% endblock %}
