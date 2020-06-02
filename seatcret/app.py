@@ -3,9 +3,7 @@ import os
 import random
 import time
 from datetime import datetime
-from typing import Optional, List
 from base64 import b64decode
-
 
 import click
 import requests
@@ -17,10 +15,10 @@ from firebase_admin import messaging
 from firebase_admin.credentials import Certificate
 from firebase_admin.messaging import Message, Notification
 
-from .constants import SUBWAY_ID_NAMES, SEAT_OCCUPIED, SEAT_UNKNOWN
+from .constants import SEAT_OCCUPIED, SEAT_UNKNOWN
+from .subway import SeoulSubway, SUBWAY_ID_NAMES
 
 
-SEOUL_REALTIME_LOCATION_API_URL = 'http://swopenAPI.seoul.go.kr/api/subway/{api_key}/{format}/realtimePosition/0/1000/{subway_name}'
 SEOUL_API_KEY= os.environ['SEOUL_API_KEY']
 FIREBASE_PRIVATE_KEY = json.loads(b64decode(os.environ['FIREBASE_PRIVATE_KEY']))
 
@@ -125,7 +123,6 @@ def get_user_itinerary(user_id: str):
     return redis.hgetall(f'itinerary:{user_id}')
 
 
-
 def redirect_unsupported():
     flash('지원하지 않는 기기입니다.')
     return redirect(url_for('home'))
@@ -179,19 +176,6 @@ def get_train(train_id: str):
     return train
 
 
-def get_realtime_location(subway_name: str) -> Optional[List]:
-    r = requests.get(SEOUL_REALTIME_LOCATION_API_URL.format(
-        api_key=SEOUL_API_KEY,
-        format='json',
-        subway_name=subway_name
-    ))
-    try:
-        decoded = r.json()
-    except ValueError:
-        return None
-    return decoded.get('realtimePositionList', None)
-
-
 def get_subway_stations(subway_id: str):
     return redis.hgetall(f"subway:{subway_id}:stations")
 
@@ -206,8 +190,10 @@ def event_processor():
 
 def update_subway_location():
     """Update realtime subway locations."""
+    client = SeoulSubway(SEOUL_API_KEY)
+
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
-        positions = get_realtime_location(subway_name)
+        positions = client.get_realtime_location(subway_name)
         if not positions:
             continue
 
