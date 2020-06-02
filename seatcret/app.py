@@ -185,8 +185,10 @@ def get_realtime_location(subway_name: str) -> Optional[List]:
         format='json',
         subway_name=subway_name
     ))
-    r.raise_for_status()
-    decoded = r.json()
+    try:
+        decoded = r.json()
+    except ValueError:
+        return None
     return decoded.get('realtimePositionList', None)
 
 
