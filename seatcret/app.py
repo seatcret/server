@@ -58,20 +58,32 @@ def register_user(platform: str, token: str):
     return user_id, redis.hgetall(f"user:{user_id}")
 
 
+def get_train_directions_for_subway(subway_id: str):
+    train_ids = redis.smembers(f'trains:{subway_id}')
+    trains = []
+    for train_id in train_ids:
+        train = redis.hgetall(f'train:{train_id}')
+        trains.append(train)
+    return {
+        0: [train for train in trains if train['direction'] == '0'],
+        1: [train for train in trains if train['direction'] == '1'],
+    }
+
+
 @app.route('/')
 def home():
     subways = {}
-    for subway_id, subway_name in SUBWAY_ID_NAMES.items():
-        train_ids = redis.smembers(f'trains:{subway_id}')
-        trains = []
-        for train_id in train_ids:
-            train = redis.hgetall(f'train:{train_id}')
-            trains.append(train)
-        subways[subway_name] = {
-            0: [train for train in trains if train['direction'] == '0'],
-            1: [train for train in trains if train['direction'] == '1'],
-        }
-    return render_template('home.html', user=get_current_user(), subways=subways)
+    for subway_id in SUBWAY_ID_NAMES:
+        subways[subway_id] = get_train_directions_for_subway(subway_id)
+    return render_template('home.html', user=get_current_user(),
+                           subways=subways, SUBWAY_ID_NAMES=SUBWAY_ID_NAMES)
+
+
+@app.route('/subways/<string:subway_id>/')
+def subway(subway_id: str):
+    train_directions = get_train_directions_for_subway(subway_id)
+    return render_template('subway.html', user=get_current_user(), subway_id=subway_id,
+                           train_directions=train_directions, SUBWAY_ID_NAMES=SUBWAY_ID_NAMES)
 
 
 @app.route('/users/', methods=['POST'])

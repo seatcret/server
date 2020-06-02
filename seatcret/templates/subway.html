@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<h2>실시간 열차 위치 정보</h2>
+<h2>{{ SUBWAY_ID_NAMES[subway_id] }}</h2>
 
-{% for subway_id, directions in subways.items() %}
-<h3><a href="{{ url_for('subway', subway_id=subway_id) }}">{{ SUBWAY_ID_NAMES[subway_id] }}</a></h3>
-{% for direction, trains in directions.items() %}
+{% for direction, trains in train_directions.items() %}
 {% if not trains %}
 <p>현재 운행중인 열차가 없습니다.</p>
 {% else %}
 <h4>
-    {% if subway_id == '1002' %}
+    {% if name == '2호선' %}
 
     {% if direction == 0 %}
     내선
@@ -37,6 +35,5 @@
     {% endfor %}
 </ul>
 {% endif %}
-{% endfor %}
 {% endfor %}
 {% endblock %}
