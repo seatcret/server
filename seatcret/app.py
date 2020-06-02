@@ -214,8 +214,6 @@ def update_subway_location():
 
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
         positions = client.get_realtime_location(subway_name)
-        if not positions:
-            continue
 
         subway_train_set_key = f'trains:{subway_id}'
         redis.delete(subway_train_set_key)
