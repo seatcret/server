@@ -4,9 +4,6 @@
 <h2>{{ SUBWAY_ID_NAMES[subway_id] }}</h2>
 
 {% for direction, trains in train_directions.items() %}
-{% if not trains %}
-<p>현재 운행중인 열차가 없습니다.</p>
-{% else %}
 <h4>
     {% if name == '2호선' %}
 
@@ -26,6 +23,9 @@
 
     {% endif %}
 </h4>
+{% if not trains %}
+<p>현재 운행중인 열차가 없습니다.</p>
+{% else %}
 <ul>
     {% for train in trains %}
     <li>

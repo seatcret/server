@@ -6,9 +6,6 @@
 {% for subway_id, directions in subways.items() %}
 <h3><a href="{{ url_for('subway', subway_id=subway_id) }}">{{ SUBWAY_ID_NAMES[subway_id] }}</a></h3>
 {% for direction, trains in directions.items() %}
-{% if not trains %}
-<p>현재 운행중인 열차가 없습니다.</p>
-{% else %}
 <h4>
     {% if subway_id == '1002' %}
 
@@ -28,6 +25,9 @@
 
     {% endif %}
 </h4>
+{% if not trains %}
+<p>현재 운행중인 열차가 없습니다.</p>
+{% else %}
 <ul>
     {% for train in trains %}
     <li>
