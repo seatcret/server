@@ -289,7 +289,10 @@ def update_subway_location():
     client = Client(SEOUL_API_KEY)
 
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
-        positions = client.get_realtime_position(subway_name)
+        try:
+            positions = client.get_realtime_position(subway_name)
+        except:
+            continue
 
         subway_train_set_key = f'subway:{subway_id}:trains'
         redis.delete(subway_train_set_key)
