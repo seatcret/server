@@ -108,16 +108,15 @@ def train(subway_id: str, train_id: str):
 def seat(subway_id: str, train_id: str, car_number: int, seat_number: int):
     url = url_for('seat', subway_id=subway_id, train_id=train_id,
                   car_number=car_number, seat_number=seat_number)
-    qr = segno.make(f"https://seatcret.ji.hyeok.org{url}")
+    data = f"https://seatcret.ji.hyeok.org{url}"
+    qr = segno.make(data)
     seats = get_seats(subway_id, train_id)
-
     train = get_train(subway_id, train_id)
     stations = get_subway_stations(train['subway_id'])
-
     return render_template(
         'seat.html', user=get_current_user(), url=url, qrcode=qr.svg_data_uri(),
         train_id=train_id, car_number=car_number, seat_number=seat_number,
-        stations=stations, subway_id=subway_id,
+        stations=stations, subway_id=subway_id, data=data,
     )
 
 
