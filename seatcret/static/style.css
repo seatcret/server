@@ -1,9 +1,109 @@
+
 .seats {
-    column-count: 20;
-    list-style-type: none;
-    padding-left: 0;
+  column-count: 20;
+  list-style-type: none;
+  padding-left: 0;
 }
 
 .seats a {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+input:focus {outline:none;}
+
+main {
+    margin: 20px;
+}
+
+.container {
+    padding: 0;
+}
+header {
+    font-size: 0.9em;
+    height: 100px;
+    background: #22305a;
+    position: relative;
+    z-index: 1;
+    width: auto;
+}
+
+#headerTable {
+    text-align: center;
+    width: 100%;
+}
+
+.headerTr {
+    height: 50px;
+}
+
+.floating-label {
+    background: transparent;
+    border: none;
+    display: block;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    width: 40%;
+    text-align: left;
+}
+.headerTitleTime, .headerTitleSt {
+    width: 50%;
+}
+.headerTitleTime:before{
+    color: white;
+    content: attr(data-th) ": ";
+    font-weight: bold;
+    width: 55%;
+    display: inline-block;
+}
+
+.headerTitleSt:before {
+    color: white;
+    float: left;
+    content: attr(data-th) ": ";
+    font-weight: bold;
+    width: 40%;
+    text-align: right;
+    display: inline-block;
+}
+
+@media (max-width: 480px) {
+    .headerTitle {
+        display : none;
+        
+    }
+}
+.search {
+    display: block;
+    width: 50%;
+    float: right;
+}
+
+.searchTerm {
+    width: 60%;
+    margin: 0;
+    display: block;
+    float: left;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+}
+
+.searchTerm:focus{
+    color: #000;
+}
+
+.searchButton {
+    border: 0;
+    display: block;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+}
+
+.fa{
+    color: black;
 }

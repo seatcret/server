@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -6,19 +7,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='mdtimepicker.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="/static/mdtimepicker.js"></script>
     <title>지하철 Seat크릿!</title>
+    <style>
+    </style>
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1><a href="{{ url_for('home') }}">지하철 Seat크릿! 💺</a></h1>
-            <ul>
+            <table id = "headerTable">
+                <thead>
+                    <tr class = "headerTr">
+                        <!-- <td class = "headerTitle">현재시간</td> -->
+                        <td class = "headerTitleTime" data-th="현재시간">
+                            <input type="text" id="timepicker" class = "floating-label"/>
+                        </td>
+                        <!-- <td class = "headerTitle">도착예정시간</td> -->
+                        <td class = "headerTitleTime" data-th="도착예정시간"><input type="text" id="timepicker2" class = "floating-label"/></td>
+                    </tr>
+                    
+                    <tr class = "headerTr">
+                        <td class = "headerTitleSt" data-th="출발역">
+                            <div class="wrap">
+                                <div class="search">
+                                   <input type="text" class="searchTerm">
+                                   <button type="submit" class="searchButton">
+                                     <i class="fa fa-search"></i>
+                                  </button>
+                                </div>
+                             </div>
+                        </td>
+                        <td class = "headerTitleSt" data-th="도착역">
+                            <div class="wrap">
+                                <div class="search">
+                                   <input type="text" class="searchTerm">
+                                   <button type="submit" class="searchButton">
+                                     <i class="fa fa-search"></i>
+                                  </button>
+                                </div>
+                             </div>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <!-- <h1><a href="{{ url_for('home') }}">지하철 Seat크릿! 💺</a></h1> -->
+            <!-- <ul>
                 <li>
                     <a href="{{ url_for('profile') }}">내 정보</a>
                 </li>
-            </ul>
+            </ul> -->
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
@@ -34,6 +76,42 @@
             {% endblock %}
         </main>
     </div>
+
+    
+    <script type="text/javascript">
+        $('#timepicker').mdtimepicker({
+            // format of the time value (data-time attribute)
+            timeFormat:'hh:mm:ss.000',
+            // format of the input value
+            format:'h:mm tt',     
+            // theme of the timepicker
+            // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+            theme:'blue',       
+            // determines if input is readonly
+            readOnly:true,      
+            // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+            hourPadding:false,
+            // determines if clear button is visible 
+            clearBtn:false
+        });
+        
+        $('#timepicker2').mdtimepicker({
+            // format of the time value (data-time attribute)
+            timeFormat:'hh:mm:ss.000',
+            // format of the input value
+            format:'h:mm tt',     
+            // theme of the timepicker
+            // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+            theme:'blue',
+            // determines if input is readonly
+            readOnly:true,      
+            // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+            hourPadding:false,
+            // determines if clear button is visible 
+            clearBtn:false
+        });
+    </script>
 </body>
 
 </html>
+
