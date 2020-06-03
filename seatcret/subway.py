@@ -1,10 +1,13 @@
 from typing import List
 
-import requests
+from requests import Session
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 SAMPLE_API_KEY = 'sample'
-SEOUL_REALTIME_LOCATION_API_URL = 'http://swopenAPI.seoul.go.kr/api/subway/{api_key}/{format}/realtimePosition/{start_index}/{end_index}/{subway_name}'
+OPENAPI_BASE_URL = 'http://swopenapi.seoul.go.kr'
+REALTIME_POSITION_API_URL = '/api/subway/{api_key}/{format}/realtimePosition/{start_index}/{end_index}/{subway_name}'
 
 SUBWAY_ID_NAMES = {
     '1001': '1호선',
@@ -36,14 +39,17 @@ class SeoulSubway:
             start_index = 0
             end_index = 50
 
-        url = SEOUL_REALTIME_LOCATION_API_URL.format(
+        s = Session()
+        retries = Retry(status_forcelist=[503])
+        s.mount(OPENAPI_BASE_URL, HTTPAdapter(max_retries=retries))
+        url = OPENAPI_BASE_URL + REALTIME_POSITION_API_URL.format(
             api_key=self.api_key,
             format='json',
             subway_name=subway_name,
             start_index=start_index,
             end_index=end_index,
         )
-        r = requests.get(url)
+        r = s.get(url)
         r.raise_for_status()
 
         d = r.json()
