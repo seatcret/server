@@ -4,6 +4,7 @@
 <h2>여정 등록</h2>
 
 <form action="{{ url_for('add_itinerary') }}" method="POST">
+    <input type="hidden" name="subway_id" value="{{ subway_id }}">
     <input type="hidden" name="train_id" value="{{ train_id }}">
     <input type="hidden" name="car_number" value="{{ car_number }}">
     <input type="hidden" name="seat_number" value="{{ seat_number }}">

@@ -59,10 +59,10 @@ def register_user(platform: str, token: str):
 
 
 def get_subway_trains(subway_id: str):
-    train_ids = redis.smembers(f'trains:{subway_id}')
+    train_ids = redis.smembers(f'subway:{subway_id}:trains')
     trains = []
     for train_id in train_ids:
-        train = redis.hgetall(f'train:{train_id}')
+        train = redis.hgetall(f'train:{subway_id}:{train_id}')
         trains.append(train)
     return trains
 
@@ -97,27 +97,31 @@ def register():
     return ''
 
 
-@app.route('/trains/<string:train_id>/')
-def train(train_id: str):
-    train = redis.hgetall(f"train:{train_id}")
+@app.route('/trains/<string:subway_id>/<string:train_id>/')
+def train(subway_id: str, train_id: str):
+    train = get_train(subway_id, train_id)
     return render_template('train.html', train=train)
 
 
-@app.route('/seats/<string:train_id>/<int:car_number>/<int:seat_number>/')
-def seat(train_id: str, car_number: int, seat_number: int):
-    url = url_for('seat', train_id=train_id,
+@app.route('/seats/<string:subway_id>/<string:train_id>/<int:car_number>/<int:seat_number>/')
+def seat(subway_id: str, train_id: str, car_number: int, seat_number: int):
+    url = url_for('seat', subway_id=subway_id, train_id=train_id,
                   car_number=car_number, seat_number=seat_number)
     qr = segno.make(f"https://seatcret.ji.hyeok.org{url}")
-    seats = redis.hgetall(f'train:{train_id}:seats')
+    seats = get_seats(subway_id, train_id)
 
-    train = get_train(train_id)
+    train = get_train(subway_id, train_id)
     stations = get_subway_stations(train['subway_id'])
 
     return render_template(
         'seat.html', user=get_current_user(), url=url, qrcode=qr.svg_data_uri(),
         train_id=train_id, car_number=car_number, seat_number=seat_number,
-        stations=stations,
+        stations=stations, subway_id=subway_id,
     )
+
+
+def get_seats(subway_id: str, train_id: str):
+    seats = redis.hgetall(f'train:{subway_id}:{train_id}:seats')
 
 
 @app.route('/profile/')
@@ -132,7 +136,7 @@ def profile():
 
     itinerary = get_user_itinerary(user['id'])
     if itinerary:
-        train = get_train(itinerary['train_id'])
+        train = get_train(itinerary['subway_id'], itinerary['train_id'])
     else:
         train = None
 
@@ -154,26 +158,24 @@ def add_itinerary():
     if not user:
         return redirect_unsupported()
 
-    
-    train_id = request.form['train_id']
-    destination_id = request.form['destination_id']
-
-    train = get_train(train_id)
+    f = request.form
+    train = get_train(f['subway_id'], f['train_id'])
     stations = get_subway_stations(train['subway_id'])
-    destination_name = stations[destination_id]
+    destination_name = stations[f['destination_id']]
 
     redis.hset(f"itinerary:{user['id']}", mapping={
-        'train_id': train_id,
+        'subway_id': f['subway_id'],
+        'train_id': f['train_id'],
 
         'origin_name': train['station_name'],
         'origin_id': train['station_id'],
 
-        'destination_id': destination_id,
+        'destination_id': f['destination_id'],
         'destination_name': destination_name,
 
-        'seated': request.form['seated'],
-        'car_number': request.form['car_number'],
-        'seat_number': request.form['seat_number'],
+        'seated': f['seated'],
+        'car_number': f['car_number'],
+        'seat_number': f['seat_number'],
     })
 
     flash(f"{train['station_name']}에서 {destination_name}까지의 여정이 추가되었습니다!")
@@ -191,9 +193,8 @@ def end_itinerary():
     return redirect(url_for('profile'))
 
 
-def get_train(train_id: str):
-    train = redis.hgetall(f"train:{train_id}")
-    return train
+def get_train(subway_id: str, train_id: str):
+    return redis.hgetall(f"train:{subway_id}:{train_id}")
 
 
 def get_subway_stations(subway_id: str):
@@ -226,7 +227,7 @@ def update_subway_location():
 
             redis.sadd(subway_train_set_key, train_id)
             redis.hset(f"subway:{subway_id}:stations", station_id, station_name)
-            redis.hset(f"train:{train_id}", mapping={
+            redis.hset(f"train:{subway_id}:{train_id}", mapping={
                 'id': train_id,
 
                 'subway_id': subway_id,
@@ -261,8 +262,7 @@ def notify_getoff():
         user = get_user(user_id)
 
         itinerary = redis.hgetall(key)
-        train_id = itinerary['train_id']
-        train = get_train(train_id)
+        train = get_train(itinerary['subway_id'], itinerary['train_id'])
         if train['station_id'] == itinerary['destination_id']:
             redis.delete(key)
             if user['platform'] == 'fcm':

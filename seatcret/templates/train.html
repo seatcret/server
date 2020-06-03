@@ -56,7 +56,7 @@
 <ol class='seats'>
     {% for seat_number in range(1, 41) %}
     <li>
-        <a href="{{ url_for('seat', train_id=train.id, car_number=car_number, seat_number=seat_number) }}">💺</a>
+        <a href="{{ url_for('seat', subway_id=train.subway_id, train_id=train.id, car_number=car_number, seat_number=seat_number) }}">💺</a>
     </li>
     {% endfor %}
 </ol>
