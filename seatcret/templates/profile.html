@@ -27,4 +27,18 @@
 {% else %}
 <p>현재 진행중인 여정이 없습니다.</p>
 {% endif %}
+
+<h3>설정</h3>
+<form action="{{ url_for('update_profile') }}" method="POST">
+    <div>
+        <input type="checkbox" name="notification_seat_vacancy" {% if user['notification_seat_vacancy'] == 'on' %}checked{% endif %}>빈 좌석이 발생하였을 때 알림 받기</input>
+    </div>
+    <div>
+        <input type="checkbox" name="notification_itinerary_end" {% if user['notification_itinerary_end'] == 'on' %}checked{% endif %}>여정이 끝났을 때 알림 받기</input>
+    </div>
+    <div>
+        <button type="submit">설정 적용</button>
+    </div>
+</form>
+
 {% endblock %}

@@ -56,7 +56,18 @@
 <ol class='seats'>
     {% for seat_number in range(1, 41) %}
     <li>
-        <a href="{{ url_for('seat', subway_id=train.subway_id, train_id=train.id, car_number=car_number, seat_number=seat_number) }}">💺</a>
+        {% if car_number|string + '-' + seat_number|string in seats %}
+        {% if eta[car_number|string + '-' + seat_number|string] < 3 %}
+        🟡
+        {% else %}
+        🔴
+        {% endif %}
+        {% else %}
+        <a href="{{ url_for('seat', subway_id=train.subway_id, train_id=train.id, car_number=car_number, seat_number=seat_number) }}">
+            🟢
+        </a>
+        {% endif %}
+
     </li>
     {% endfor %}
 </ol>
