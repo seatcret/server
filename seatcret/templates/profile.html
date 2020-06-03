@@ -10,7 +10,7 @@
 <h3>여정</h3>
 {% if itinerary %}
 <ul>
-    <li>목적지: {{ itinerary.destination_name }}</li>
+    <li>목적지: {{ STATION_ID_NAMES[itinerary.destination_id] }}</li>
     <li>착석 여부:
         {% if itinerary.seated == "true" %}
         앉아서 가고 있어요 🧘
