@@ -4,36 +4,17 @@ from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+from ..constants import OPENAPI_BASE_URL, SAMPLE_API_KEY
 
-SAMPLE_API_KEY = 'sample'
-OPENAPI_BASE_URL = 'http://swopenapi.seoul.go.kr'
+
 REALTIME_POSITION_API_URL = '/api/subway/{api_key}/{format}/realtimePosition/{start_index}/{end_index}/{subway_name}'
 
-SUBWAY_ID_NAMES = {
-    '1001': '1호선',
-    '1002': '2호선',
-    '1003': '3호선',
-    '1004': '4호선',
-    '1005': '5호선',
-    '1006': '6호선',
-    '1007': '7호선',
-    '1008': '8호선',
-    '1009': '9호선',
-    '1063': '경의중앙선',
-    '1065': '공항철도',
-    '1067': '경춘선',
-    '1071': '수인선',
-    '1075': '분당선',
-    '1077': '신분당선',
-    '1092': '우이신설선',
-}
 
-
-class SeoulSubway:
+class Client:
     def __init__(self, api_key: str = SAMPLE_API_KEY):
         self.api_key = api_key
 
-    def get_realtime_location(self, subway_name: str,
+    def get_realtime_position(self, subway_name: str,
                               start_index: int = 0, end_index: int = 1000) -> List:
         if self.api_key == SAMPLE_API_KEY:
             start_index = 0

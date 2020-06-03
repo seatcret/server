@@ -16,7 +16,8 @@ from firebase_admin.credentials import Certificate
 from firebase_admin.messaging import Message, Notification
 
 from .constants import SEAT_OCCUPIED, SEAT_UNKNOWN
-from .subway import SeoulSubway, SUBWAY_ID_NAMES
+from .seoul.subway import Client
+from .seoul.subway.constants import STATION_ID_NAMES, SUBWAY_ID_NAMES
 
 
 SEOUL_API_KEY= os.environ['SEOUL_API_KEY']
@@ -211,10 +212,10 @@ def event_processor():
 
 def update_subway_location():
     """Update realtime subway locations."""
-    client = SeoulSubway(SEOUL_API_KEY)
+    client = Client(SEOUL_API_KEY)
 
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
-        positions = client.get_realtime_location(subway_name)
+        positions = client.get_realtime_position(subway_name)
 
         subway_train_set_key = f'subway:{subway_id}:trains'
         redis.delete(subway_train_set_key)
