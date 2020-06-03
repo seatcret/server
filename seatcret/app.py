@@ -159,6 +159,17 @@ def profile():
                            STATION_ID_NAMES=STATION_ID_NAMES)
 
 
+@app.route('/profile/', methods=['POST'])
+def update_profile():
+    user = get_current_user()
+    redis.hset(f"user:{user['id']}", mapping={
+        'notification_itinerary_end': 'on' if 'notification_itinerary_end' in request.form else 'off',
+        'notification_seat_vacancy': 'on' if 'notification_seat_vacancy' in request.form else 'off',
+    })
+    flash('변경된 설정이 적용되었습니다.')
+    return redirect(url_for('profile'))
+
+
 def get_itinerary(user_id: str):
     return redis.hgetall(f'itinerary:{user_id}')
 
@@ -357,7 +368,7 @@ def notify_getoff():
                 continue
 
             # send notification to users who need to get off the train
-            if user['platform'] == 'fcm':
+            if user.get('notification_itinerary_end', 'on') == 'on' and user['platform'] == 'fcm':
                 message = Message(
                     notification=Notification('여정이 끝났습니다!', '하차하세요~'),
                     token=user['token'],
@@ -376,7 +387,7 @@ def notify_getoff():
     for car_id in vacancies_created_car_ids:
         if car_id in standing_users:
             for user in standing_users[car_id]:
-                if user['platform'] == 'fcm':
+                if user.get('notification_seat_vacancy', 'on') == 'on' and user['platform'] == 'fcm':
                     message = Message(
                         notification=Notification('자리가 생겼습니다!', '착석하세요~'),
                         token=user['token'],
