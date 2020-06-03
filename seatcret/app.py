@@ -216,7 +216,7 @@ def update_subway_location():
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
         positions = client.get_realtime_location(subway_name)
 
-        subway_train_set_key = f'trains:{subway_id}'
+        subway_train_set_key = f'subway:{subway_id}:trains'
         redis.delete(subway_train_set_key)
         click.echo(f"[{datetime.now()}] {subway_name}: 현재 {len(positions)} 개 차량 운행중")
 
