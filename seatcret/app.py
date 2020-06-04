@@ -208,26 +208,25 @@ def add_itinerary():
 
         available_seat_numbers = list(set(range(1, 41)) - used_seat_numbers)
         random.shuffle(available_seat_numbers)
-        if path:
-            for station_id in path:
-                try:
-                    random_seat_number = available_seat_numbers.pop()
-                except:
-                    break
-                random_user_id = f"dummy-{uuid.uuid4()}"
-                set_seat(subway_id, train_id, car_number,
-                         random_seat_number, random_user_id)
-                redis.hset(f"itinerary:{random_user_id}", mapping={
-                    'subway_id': subway_id,
-                    'train_id': train_id,
+        for station_id in path:
+            try:
+                random_seat_number = available_seat_numbers.pop()
+            except:
+                break
+            random_user_id = f"dummy-{uuid.uuid4()}"
+            set_seat(subway_id, train_id, car_number,
+                        random_seat_number, random_user_id)
+            redis.hset(f"itinerary:{random_user_id}", mapping={
+                'subway_id': subway_id,
+                'train_id': train_id,
 
-                    'origin_id': train['station_id'],
-                    'destination_id': station_id,
+                'origin_id': train['station_id'],
+                'destination_id': station_id,
 
-                    'seated': "true",
-                    'car_number': car_number,
-                    'seat_number': random_seat_number,
-                })
+                'seated': "true",
+                'car_number': car_number,
+                'seat_number': random_seat_number,
+            })
 
     flash(f"{origin_name}에서 {destination_name}까지의 여정이 추가되었습니다!")
     return redirect(url_for('profile'))
