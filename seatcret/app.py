@@ -221,7 +221,9 @@ def add_itinerary():
     if seated:
         set_seat(subway_id, train_id, car_number, seat_number, user_id)
 
+    path_humanized = ', '.join([STATION_ID_NAMES[station_id] for station_id in path])
     flash(f"{origin_name}에서 {destination_name}까지의 여정이 추가되었습니다!")
+    flash(f"다음 역을 거쳐갑니다: {path_humanized}")
     flash(f"목적지 역에 도착할 때 알림을 보내드려요.")
 
     # test harness for demonstration
