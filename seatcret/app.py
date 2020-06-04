@@ -154,11 +154,17 @@ def profile():
     itinerary = get_itinerary(user['id'])
     if itinerary:
         train = get_train(itinerary['subway_id'], itinerary['train_id'])
+        remaining_path = find_path(
+            train['station_id'],
+            itinerary['destination_id'],
+            int(train['direction'])
+        )
     else:
         train = None
+        remaining_path = None
 
     return render_template('profile.html', user=user, created_at=created_at, itinerary=itinerary, train=train,
-                           STATION_ID_NAMES=STATION_ID_NAMES)
+                           STATION_ID_NAMES=STATION_ID_NAMES, remaining_path=remaining_path)
 
 
 @app.route('/profile/', methods=['POST'])
@@ -179,6 +185,10 @@ def get_itinerary(user_id: str):
 def redirect_unsupported():
     flash('지원하지 않는 기기입니다.')
     return redirect(url_for('home'))
+
+
+def humanize_path(station_ids: List[str]):
+    return ', '.join([STATION_ID_NAMES[station_id] for station_id in path])
 
 
 @app.route('/itineraries/', methods=['POST'])
@@ -221,9 +231,8 @@ def add_itinerary():
     if seated:
         set_seat(subway_id, train_id, car_number, seat_number, user_id)
 
-    path_humanized = ', '.join([STATION_ID_NAMES[station_id] for station_id in path])
     flash(f"{origin_name}에서 {destination_name}까지의 여정이 추가되었습니다!")
-    flash(f"다음 역을 거쳐갑니다: {path_humanized}")
+    flash(f"다음 역을 거쳐갑니다: {humanize_path(path)}")
     flash(f"목적지 역에 도착할 때 알림을 보내드려요.")
 
     # test harness for demonstration
