@@ -59,6 +59,8 @@ def register_user(platform: str, token: str):
         'platform': platform,
         'token': token,
         'created_at': int(time.time()),
+        'notification_itinerary_end': 'on',
+        'notification_seat_vacancy': 'on',
     })
     return user_id, redis.hgetall(f"user:{user_id}")
 
