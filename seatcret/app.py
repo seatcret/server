@@ -196,6 +196,10 @@ def add_itinerary():
     user = get_current_user()
     if not user:
         return redirect_unsupported()
+    itinerary = get_itinerary(user['id'])
+    if itinerary:
+        flash("이미 등록된 여정이 있습니다.")
+        return redirect(url_for('profile'))
 
     f = request.form
     subway_id = f['subway_id']
