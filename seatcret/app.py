@@ -242,3 +242,10 @@ def flush_user_data():
     for key in redis.scan_iter('train:*:seats'):
         click.echo(f"Deleting seat data: {key}")
         redis.delete(key)
+
+    for key in redis.scan_iter('user:*'):
+        redis.delete('key')
+        click.echo(f"Deleting user data: {key}")
+
+    redis.delete('next_user_id')
+    redis.delete('users')
