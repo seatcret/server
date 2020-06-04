@@ -197,11 +197,21 @@ def add_itinerary():
     seated = f['seated'] == 'true'
 
     train = get_train(subway_id, train_id)
+    origin_id = train['station_id']
+
+    origin_name = STATION_ID_NAMES[origin_id]
+    destination_name = STATION_ID_NAMES[destination_id]
+
+    path = find_path(origin_id, destination_id, int(train['direction']))
+    if not path:
+        flash(f"해당 열차로는 {origin_name}역에서 {destination_name}역까지 갈 수 없습니다. 열차 운행 방향을 확인해 주세요.")
+        return redirect(request.referrer)
+
     redis.hset(f"itinerary:{user_id}", mapping={
         'subway_id': subway_id,
         'train_id': train_id,
 
-        'origin_id': train['station_id'],
+        'origin_id': origin_id,
         'destination_id': destination_id,
 
         'seated': f['seated'],
@@ -211,8 +221,6 @@ def add_itinerary():
     if seated:
         set_seat(subway_id, train_id, car_number, seat_number, user_id)
 
-    origin_name = STATION_ID_NAMES[train['station_id']]
-    destination_name = STATION_ID_NAMES[destination_id]
     flash(f"{origin_name}에서 {destination_name}까지의 여정이 추가되었습니다!")
     flash(f"목적지 역에 도착할 때 알림을 보내드려요.")
 
