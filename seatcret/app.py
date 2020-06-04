@@ -11,7 +11,7 @@ from flask import Flask, abort, flash, redirect, render_template, request, url_f
 
 from .seoul.subway.constants import STATION_ID_NAMES, SUBWAY_ID_NAMES
 from .util import find_path
-from .db import redis, get_itinerary, get_train, get_seats, delete_itinerary, get_subway_stations, get_subway_trains, set_seat
+from .db import redis, get_itinerary, get_train, get_seats, delete_itinerary, get_subway_stations, get_subway_trains, set_seat, set_itinerary
 
 
 app = Flask(__name__)
@@ -183,17 +183,7 @@ def add_itinerary():
             f"해당 열차로는 {origin_name}역에서 {destination_name}역까지 갈 수 없습니다. 열차 운행 방향을 확인해 주세요.")
         return redirect(request.referrer)
 
-    redis.hset(f"itinerary:{user_id}", mapping={
-        'subway_id': subway_id,
-        'train_id': train_id,
-
-        'origin_id': origin_id,
-        'destination_id': destination_id,
-
-        'seated': f['seated'],
-        'car_number': car_number,
-        'seat_number': seat_number,
-    })
+    set_itinerary(user_id, subway_id, train_id, origin_id, destination_id, seated, car_number, seat_number)
     if seated:
         set_seat(subway_id, train_id, car_number, seat_number, user_id)
 
@@ -215,18 +205,8 @@ def add_itinerary():
                 break
             random_user_id = f"dummy-{uuid.uuid4()}"
             set_seat(subway_id, train_id, car_number,
-                        random_seat_number, random_user_id)
-            redis.hset(f"itinerary:{random_user_id}", mapping={
-                'subway_id': subway_id,
-                'train_id': train_id,
-
-                'origin_id': train['station_id'],
-                'destination_id': station_id,
-
-                'seated': "true",
-                'car_number': car_number,
-                'seat_number': random_seat_number,
-            })
+                     random_seat_number, random_user_id)
+            set_itinerary(random_user_id, subway_id, train_id, origin_id, station_id, 'true', car_number, random_seat_number)
 
     flash(f"{origin_name}에서 {destination_name}까지의 여정이 추가되었습니다!")
     return redirect(url_for('profile'))

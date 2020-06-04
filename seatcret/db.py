@@ -27,6 +27,20 @@ def get_itinerary(user_id: str) -> dict:
     return redis.hgetall(f'itinerary:{user_id}')
 
 
+def set_itinerary(user_id, subway_id, train_id, origin_id, destination_id, seated, car_number, seat_number) -> int:
+    return redis.hset(f"itinerary:{user_id}", mapping={
+        'subway_id': subway_id,
+        'train_id': train_id,
+
+        'origin_id': origin_id,
+        'destination_id': destination_id,
+
+        'seated': f['seated'],
+        'car_number': car_number,
+        'seat_number': seat_number,
+    })
+
+
 def get_seats(subway_id: str, train_id: str) -> dict:
     seats = redis.hgetall(f'train:{subway_id}:{train_id}:seats')
     return seats
