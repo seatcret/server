@@ -6,6 +6,8 @@
 <ul>
     <li>고유번호: {{ user.id }}</li>
     <li>가입일: {{ created_at }}</li>
+    <li>푸시 플랫폼: {{ user.platform }}</li>
+    <li>푸시 토큰: <pre>{{ user.token }}</pre></li>
 </ul>
 <h3>여정</h3>
 {% if itinerary %}
