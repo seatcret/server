@@ -8,7 +8,7 @@ def get_branch_id(station_id: str):
         return station_id[:8]
     else:
         return station_id[:4]
-    
+
 
 def find_path(origin_id: str, destination_id: str, direction: int) -> Optional[List[str]]:
     # 환승은 지원하지 않음
@@ -17,7 +17,8 @@ def find_path(origin_id: str, destination_id: str, direction: int) -> Optional[L
     if orig_branch_id != dest_branch_id:
         return None
 
-    station_ids = sorted([k for k in STATION_ID_NAMES if k.startswith(orig_branch_id)])
+    station_ids = sorted(
+        [k for k in STATION_ID_NAMES if k.startswith(orig_branch_id)])
     if orig_branch_id == '10020002':  # 2호선 을지로순환선
         station_ids *= 2
         if direction == 1:
@@ -31,7 +32,7 @@ def find_path(origin_id: str, destination_id: str, direction: int) -> Optional[L
     for station_id in station_ids:
         if station_id == origin_id:
             origin_found = True
-        
+
         if origin_found:
             path.append(station_id)
             if station_id == destination_id:
@@ -39,8 +40,6 @@ def find_path(origin_id: str, destination_id: str, direction: int) -> Optional[L
 
     if not path:
         return None
-
     if path[-1] != destination_id:
         return None
-
     return path
