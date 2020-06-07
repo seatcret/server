@@ -35,7 +35,7 @@ def set_itinerary(user_id, subway_id, train_id, origin_id, destination_id, seate
         'origin_id': origin_id,
         'destination_id': destination_id,
 
-        'seated': f['seated'],
+        'seated': seated,
         'car_number': car_number,
         'seat_number': seat_number,
     })

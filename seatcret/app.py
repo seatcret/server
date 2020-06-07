@@ -169,7 +169,10 @@ def add_itinerary():
     seat_number = f['seat_number']
     user_id = user['id']
     destination_id = f['destination_id']
-    seated = f['seated'] == 'true'
+    if f['seated'] == 'true':
+        seated = 'true'
+    else:
+        seated = 'false'
 
     train = get_train(subway_id, train_id)
     origin_id = train['station_id']
