@@ -27,7 +27,7 @@ def update_subway_location():
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
         try:
             positions = client.get_realtime_position(subway_name)
-        except:
+        except RetryError:
             continue
 
         subway_train_set_key = f'subway:{subway_id}:trains'
