@@ -87,7 +87,7 @@ def train(subway_id: str, train_id: str):
         used_car_number, used_seat_number = key.split('-')
         itinerary = get_itinerary(user_id)
         path = find_path(
-            itinerary['origin_id'], itinerary['destination_id'], train.direction)
+            train.station_id, itinerary['destination_id'], train.direction)
         if path:
             eta[key] = len(path) - 1
 
