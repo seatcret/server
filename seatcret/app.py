@@ -8,8 +8,8 @@ from datetime import datetime
 import click
 import segno
 from flask import Flask, abort, flash, redirect, render_template, request, url_for
+from seoul.subway import Direction, STATION_ID_NAMES, SUBWAY_ID_NAMES
 
-from .seoul.subway.constants import STATION_ID_NAMES, SUBWAY_ID_NAMES
 from .util import find_path
 from .db import redis, get_itinerary, get_train, get_seats, delete_itinerary, get_subway_stations, get_subway_trains, set_seat, set_itinerary
 
@@ -50,8 +50,8 @@ def register_user(platform: str, token: str):
 def get_train_directions_for_subway(subway_id: str):
     trains = get_subway_trains(subway_id)
     return {
-        0: [train for train in trains if train['direction'] == '0'],
-        1: [train for train in trains if train['direction'] == '1'],
+        0: [train for train in trains if train.direction == Direction.UP],
+        1: [train for train in trains if train.direction == Direction.DOWN],
     }
 
 
@@ -87,7 +87,7 @@ def train(subway_id: str, train_id: str):
         used_car_number, used_seat_number = key.split('-')
         itinerary = get_itinerary(user_id)
         path = find_path(
-            itinerary['origin_id'], itinerary['destination_id'], train['direction'])
+            itinerary['origin_id'], itinerary['destination_id'], train.direction)
         if path:
             eta[key] = len(path) - 1
 
@@ -102,7 +102,7 @@ def seat(subway_id: str, train_id: str, car_number: int, seat_number: int):
     qr = segno.make(data)
     seats = get_seats(subway_id, train_id)
     train = get_train(subway_id, train_id)
-    stations = get_subway_stations(train['subway_id'])
+    stations = get_subway_stations(train.subway_id)
     return render_template(
         'seat.html', user=get_current_user(), url=url, qrcode=qr.svg_data_uri(),
         train_id=train_id, car_number=car_number, seat_number=seat_number,
@@ -124,9 +124,9 @@ def profile():
     if itinerary:
         train = get_train(itinerary['subway_id'], itinerary['train_id'])
         remaining_path = find_path(
-            train['station_id'],
+            train.station_id,
             itinerary['destination_id'],
-            int(train['direction'])
+            train.direction
         )
     else:
         train = None
@@ -175,12 +175,12 @@ def add_itinerary():
         seated = 'false'
 
     train = get_train(subway_id, train_id)
-    origin_id = train['station_id']
+    origin_id = train.station_id
 
     origin_name = STATION_ID_NAMES[origin_id]
     destination_name = STATION_ID_NAMES[destination_id]
 
-    path = find_path(origin_id, destination_id, int(train['direction']))
+    path = find_path(origin_id, destination_id, train.direction)
     if not path:
         flash(
             f"해당 열차로는 {origin_name}역에서 {destination_name}역까지 갈 수 없습니다. 열차 운행 방향을 확인해 주세요.")

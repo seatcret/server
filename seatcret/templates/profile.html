@@ -21,8 +21,8 @@
         서서 가고 있어요 🧍
         {% endif %}
     </li>
-    <li>현재 열차: <a href="{{ url_for('train', subway_id=train.subway_id, train_id=train.id) }}">{{ train.subway_name }}
-            {{ train.id }}번 열차 {{ itinerary.car_number }}량</a>
+    <li>현재 열차: <a href="{{ url_for('train', subway_id=train.subway_id, train_id=train.number) }}">{{ train.subway_name }}
+            {{ train.number }}번 열차 {{ itinerary.car_number }}량</a>
     </li>
     <li>현재 위치: {{ train.station_name }}</li>
 </ul>

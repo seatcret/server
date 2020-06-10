@@ -420,6 +420,17 @@ version = "1.0.0"
 
 [[package]]
 category = "main"
+description = "Seoul public data API client library."
+name = "seoul"
+optional = false
+python-versions = "*"
+version = "0.2.0"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -460,7 +471,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "3445dbd833594019a38e82fc909af871c743b9d256e53d7889b4bd2293a66507"
+content-hash = "1f921cb07bca5e79cfe07f5386b2f19745591e6d79817ca6ace8cea3533c408d"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -715,6 +726,10 @@ rsa = [
 segno = [
     {file = "segno-1.0.0-py2.py3-none-any.whl", hash = "sha256:a2bd4b58851335e8e652ce34641d7b6c590f0c7347aa45cf7237bcc83de4cdb9"},
     {file = "segno-1.0.0.tar.gz", hash = "sha256:9f6abc90f10d56b8ef29b6655bff5122dae37c37647bc04098a5ae4a5900db84"},
+]
+seoul = [
+    {file = "seoul-0.2.0-py3-none-any.whl", hash = "sha256:e3267db022c17c057b400d52451c61211f205b25073bf7603661a4370e44fae3"},
+    {file = "seoul-0.2.0.tar.gz", hash = "sha256:739a5a9374a23d96dcdc0390ae3036eacac90ac9a3b2c0de44bee04b8e492df8"},
 ]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},

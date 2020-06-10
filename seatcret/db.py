@@ -1,6 +1,8 @@
+import json
 from typing import List
 
 from redis import Redis
+from seoul.subway import Train
 
 
 redis = Redis(decode_responses=True)
@@ -10,7 +12,7 @@ def get_subway_trains(subway_id: str) -> List[dict]:
     train_ids = redis.smembers(f'subway:{subway_id}:trains')
     trains = []
     for train_id in train_ids:
-        train = redis.hgetall(f'train:{subway_id}:{train_id}')
+        train = get_train(subway_id, train_id)
         trains.append(train)
     return trains
 
@@ -20,7 +22,7 @@ def get_subway_stations(subway_id: str) -> dict:
 
 
 def get_train(subway_id: str, train_id: str) -> dict:
-    return redis.hgetall(f"train:{subway_id}:{train_id}")
+    return Train(**json.loads(redis.get(f"train:{subway_id}:{train_id}")))
 
 
 def get_itinerary(user_id: str) -> dict:

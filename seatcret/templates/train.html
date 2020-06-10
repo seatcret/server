@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<h2>{{ train.subway_name }} {{ train.id }}번 열차</h2>
+<h2>{{ train.subway_name }} {{ train.number }}번 열차</h2>
 <ul>
     <li>현재 위치: {{ train.station_name }}</li>
     <li>현재 상태:
-        {% if train.status == '0' %}
+        {% if train.status == 0 %}
         진입
-        {% elif train.status == '1' %}
+        {% elif train.status == 1 %}
         도착
         {% else %}
         출발
@@ -16,7 +16,7 @@
     <li>운행 방향:
         {% if train.subway_id == '1002' %}
 
-        {% if train.direction == '0' %}
+        {% if train.direction == 0 %}
         내선
         {% else %}
         외선
@@ -24,7 +24,7 @@
 
         {% else %}
 
-        {% if train.direction == '0' %}
+        {% if train.direction == 0 %}
         상행
         {% else %}
         하행
@@ -33,21 +33,21 @@
         {% endif %}
     </li>
     <li>막차:
-        {% if train.is_last == '0' %}
+        {% if train.last %}
         아님
         {% else %}
         맞음
         {% endif %}
     </li>
     <li>급행:
-        {% if train.is_express == '0' %}
+        {% if train.express %}
         아님
         {% else %}
         맞음
         {% endif %}
     </li>
     <li>종착역: {{ train.terminal_station_name }}</li>
-    <li>마지막 갱신 시점: {{ train.received_at }}</li>
+    <li>마지막 갱신 시점: {{ train.updated_at }}</li>
 </ul>
 
 <h3>좌석 정보 (열차 진행 방향: ➡️)</h3>
@@ -65,7 +65,7 @@
         {% endif %}
         {% else %}
         <a
-            href="{{ url_for('seat', subway_id=train.subway_id, train_id=train.id, car_number=car_number, seat_number=seat_number) }}">
+            href="{{ url_for('seat', subway_id=train.subway_id, train_id=train.number, car_number=car_number, seat_number=seat_number) }}">
             🟢
         </a>
         {% endif %}

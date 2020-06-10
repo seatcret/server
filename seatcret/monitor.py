@@ -1,4 +1,5 @@
 import os
+from dataclasses import asdict
 import json
 from base64 import b64decode
 from datetime import datetime
@@ -8,9 +9,10 @@ import firebase_admin
 from firebase_admin.credentials import Certificate
 from firebase_admin import messaging
 from firebase_admin.messaging import Message, Notification
+from requests.exceptions import RetryError
 
-from .seoul.subway import Client
-from .seoul.subway.constants import SUBWAY_ID_NAMES
+from seoul import Client
+from seoul.subway import SUBWAY_ID_NAMES
 from .db import redis, get_user, get_itinerary, get_train, delete_itinerary
 
 
@@ -26,41 +28,19 @@ def update_subway_location():
 
     for subway_id, subway_name in SUBWAY_ID_NAMES.items():
         try:
-            positions = client.get_realtime_position(subway_name)
+            trains = client.get_subway_realtime_position(subway_name)
         except RetryError:
             continue
 
         subway_train_set_key = f'subway:{subway_id}:trains'
         redis.delete(subway_train_set_key)
-        click.echo(f"[{datetime.now()}] {subway_name}: 현재 {len(positions)} 개 차량 운행중")
+        click.echo(f"[{datetime.now()}] {subway_name}: 현재 {len(trains)} 개 차량 운행중")
 
-        for p in positions:
-            train_id = p['trainNo']
-            station_id = p['statnId']
-            station_name = p['statnNm']
-
-            redis.sadd(subway_train_set_key, train_id)
-            redis.hset(f"subway:{subway_id}:stations", station_id, station_name)
-            redis.hset(f"train:{subway_id}:{train_id}", mapping={
-                'id': train_id,
-
-                'subway_id': subway_id,
-                'subway_name': subway_name,
-
-                'station_id': station_id,
-                'station_name': station_name,
-
-                'terminal_station_id': p['statnTid'],
-                'terminal_station_name': p['statnTnm'],
-
-                'direction': p['updnLine'],
-                'status': p['trainSttus'],
-                'is_express': p['directAt'],
-                'is_last': p['lstcarAt'],
-
-                'last_reception_date': p['lastRecptnDt'],
-                'received_at': p['recptnDt'],
-            })
+        for train in trains:
+            redis.sadd(subway_train_set_key, train.number)
+            redis.hset(f"subway:{subway_id}:stations", train.station_id, train.station_name)
+            redis.hset(f"subway:{subway_id}:stations", train.terminal_station_id, train.terminal_station_name)
+            redis.set(f"train:{subway_id}:{train.number}", json.dumps(asdict(train), default=str))
 
 
 def notify_getoff():
@@ -74,9 +54,9 @@ def notify_getoff():
         user = get_user(user_id)
         itinerary = get_itinerary(user_id)
         train = get_train(itinerary['subway_id'], itinerary['train_id'])
-        car_id = f"{train['subway_id']}-{train['id']}-{itinerary['car_number']}"
+        car_id = f"{train.subway_id}-{train.number}-{itinerary['car_number']}"
 
-        if train['station_id'] == itinerary['destination_id']:
+        if train.station_id == itinerary['destination_id']:
             delete_itinerary(user_id)
             vacancies_created_car_ids.add(car_id)
             if user_id.startswith('dummy'):
