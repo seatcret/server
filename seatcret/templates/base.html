@@ -1,25 +1,75 @@
-
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>지하철 Seat크릿!</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='mdtimepicker.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="/static/mdtimepicker.js"></script>
-    <title>지하철 Seat크릿!</title>
-    <style>
-    </style>
-</head>
+    <script>
+    $( function() {
+        var availableTags = [
+            "동묘앞", "서울", "시청", "종각", "종로5가", "제기동", "외대앞", "가산디지털단지", "석수", "관악", "명학", "군포", "의왕", "화서", "수원", "세류", "송탄", "서정리", "지제", "성환", "두정", "천안", "남영", "용산", "노량진", "대방", "영등포", "신도림", "구로", "청량리", "구일", "오류동", "온수", "역곡", "부천", "중동", "송내", "백운", "동암", "주안", "제물포", "석계", "월계", "창동", "도봉산", "녹양", "양주", "덕정", "지행", "소요산", "봉명", "신설동", "성균관대", "독산", "병점", "진위", "금정", "동대문", "개봉", "간석", "도원", "회기", "신이문", "광운대", "녹천", "망월사", "의정부", "덕계", "종로3가", "금천구청", "신길", "도화", "동두천중앙", "안양", "세마", "오산", "평택", "소사", "부개", "부평", "동인천", "회룡", "가능", "쌍용(나사렛대)", "직산", "당정", "방학", "아산", "오산대", "동두천", "인천", "도봉", "온양온천", "배방", "보산", "신창", "서동탄", "광명",
+            "건대입구", "구의", "잠실나루", "종합운동장", "삼성", "역삼", "서초", "사당", "낙성대", "서울대입구", "신림", "구로디지털단지", "신도림지선", "문래", "영등포구청", "당산", "합정", "홍대입구", "이대", "충정로", "시청", "을지로3가", "동대문역사문화공원", "상왕십리", "왕십리", "한양대", "뚝섬", "신답", "성수지선", "양천구청", "교대", "봉천", "신촌", "아현", "을지로4가", "용답", "신정네거리", "까치산", "강변", "잠실", "잠실새내", "선릉", "강남", "방배", "신대방", "을지로입구", "신당", "대림", "신설동", "용두", "도림천",
+            "구파발", "불광", "녹번", "무악재", "독립문", "안국", "종로3가", "충무로", "약수", "금호", "압구정", "신사", "교대", "양재", "매봉", "도곡", "학여울", "일원", "수서", "경찰병원", "원당", "삼송", "화정", "백석", "마두", "주엽", "원흥", "지축", "동대입구", "옥수", "잠원", "고속터미널", "오금", "정발산", "남부터미널", "대치", "대화", "연신내", "홍제", "경복궁", "을지로3가", "대곡", "대청", "가락시장",
+            "상계", "창동", "쌍문", "수유", "미아", "미아사거리", "길음", "성신여대입구", "혜화", "동대문", "충무로", "명동", "회현", "숙대입구", "신용산", "이촌", "동작", "총신대입구(이수)", "사당", "남태령", "과천", "정부과천청사", "금정", "대야미", "반월", "중앙", "초지", "신길온천", "오이도", "동대문역사문화공원", "삼각지", "당고개", "대공원", "범계", "산본", "수리산", "노원", "서울", "정왕", "한성대입구", "경마공원", "인덕원", "평촌", "상록수", "한대앞", "고잔", "안산", "선바위",
+            "방화", "김포공항", "마곡", "발산", "우장산", "까치산", "목동", "오목교(목동운동장앞)", "영등포구청", "영등포시장", "여의나루", "마포", "충정로", "종로3가", "동대문역사문화공원", "청구", "마장", "장한평", "광나루(장신대)", "강동", "상일동", "둔촌동", "방이", "거여", "신정(은행정)", "양평", "신길", "서대문", "광화문", "을지로4가", "행당", "답십리", "개화산", "송정", "여의도", "공덕", "애오개", "신금호", "군자(능동)", "아차산(어린이대공원후문)", "천호(풍납토성)", "올림픽공원(한국체대)", "화곡", "왕십리", "오금", "길동", "고덕", "굽은다리(강동구민회관앞)", "개롱", "명일", "마천",
+            "응암(하선-종착)", "불광", "새절(신사)", "월드컵경기장(성산)", "마포구청", "상수", "대흥(서강대앞)", "효창공원앞", "삼각지", "이태원", "한강진", "신당", "동묘앞", "보문", "고려대", "월곡(동덕여대)", "돌곶이", "화랑대(서울여대입구)", "독바위", "광흥창", "안암(고대병원앞)", "상월곡(한국과학기술연구원)", "봉화산", "연신내", "증산(명지대앞)", "디지털미디어시티", "공덕", "녹사평", "버티고개", "약수", "창신", "신내", "역촌", "망원", "합정", "석계", "태릉입구", "구산", "청구",
+            "도봉산", "수락산", "노원", "하계", "태릉입구", "상봉", "면목", "용마산", "중곡", "건대입구", "청담", "강남구청", "논현", "반포", "고속터미널", "총신대입구(이수)", "남성", "숭실대입구(살피재)", "신대방삼거리", "신풍", "대림", "철산", "천왕", "온수", "부천종합운동장", "삼산체육관", "굴포천", "중계", "공릉(서울산업대입구)", "어린이대공원(세종대)", "뚝섬유원지", "내방", "장승배기", "까치울", "마들", "보라매", "가산디지털단지", "중화", "사가정", "군자(능동)", "학동", "상도(중앙대앞)", "남구로", "광명사거리", "상동", "먹골", "춘의역", "부천시청", "신중동", "장암", "부평구청",
+            "암사", "천호(풍납토성)", "잠실", "가락시장", "장지", "산성", "남한산성입구(성남법원,검찰청)", "수진", "모란", "몽촌토성(평화의문)", "석촌", "송파", "단대오거리", "복정", "신흥", "강동구청", "문정",
+            "김포공항", "공항시장", "양천향교", "가양", "등촌", "염창", "선유도", "국회의사당", "여의도", "노량진", "노들", "흑석", "구반포", "고속터미널", "사평", "언주", "봉은사", "종합운동장", "석촌", "삼전", "송파나루", "한성백제", "올림픽공원", "중앙보훈병원", "개화", "마곡나루", "증미", "신논현", "선정릉", "석촌고분", "둔촌오륜", "신방화", "당산", "샛강", "신반포", "삼성중앙", "신목동", "동작",
+            "풍산", "일산", "파주", "공덕", "홍대입구", "서울", "서빙고", "청량리", "중랑", "양원", "양정", "덕소", "운길산", "용문", "화전", "행신", "이촌", "한남", "구리", "양수", "탄현", "백마", "회기", "강매", "효창공원앞", "가좌", "옥수", "곡산", "도농", "야당", "용산", "신원", "디지털미디어시티", "문산", "응봉", "운정", "대곡", "도심", "능곡", "수색", "왕십리", "국수", "상봉", "금릉", "팔당", "망우", "아신", "금촌", "서강대", "오빈", "월롱", "신촌(경의.중앙선)", "양평", "원덕", "지평",
+            "서울", "공덕", "홍대입구", "마곡나루", "김포공항", "계양", "청라국제도시", "운서", "인천공항1터미널", "디지털미디어시티", "검암", "공항화물청사", "영종", "인천공항2터미널",
+            "금곡", "마석", "대성리", "상천", "가평", "강촌", "김유정", "남춘천", "망우", "상봉", "평내호평", "굴봉산", "천마산", "춘천", "청평", "백양리", "신내", "갈매", "별내", "사릉", "퇴계원", "청량리", "회기", "중랑",
+            "오이도", "소래포구", "원인재", "인천논현", "남동인더스파크", "호구포", "연수", "월곶", "달월", "송도", "인천",
+            "선릉", "대모산", "복정", "모란", "서현", "수내", "오리", "보정", "상갈", "영통", "망포", "왕십리", "서울숲", "가천대", "야탑", "압구정로데오", "이매", "선정릉", "수서", "정자", "죽전", "매탄권선", "한티", "매교", "태평", "청명", "강남구청", "도곡", "수원시청", "미금", "수원", "구룡", "구성", "개포동", "신갈", "기흥", "청량리",
+            "양재", "청계산입구", "판교", "정자", "수지구청", "상현", "광교중앙", "광교", "미금", "강남", "양재시민의숲", "성복", "동천",
+            "북한산우이", "가오리", "삼양사거리", "솔샘", "보문", "신설동", "4.19 민주묘지", "솔밭공원", "북한산보국문", "삼양", "성신여대입구", "정릉", "화계"
+        ];
+        $( "#searchBar1" ).autocomplete({
+          source: availableTags,
+          select : function(event, ui) {
+            console.log(ui.item);
+        },
+        focus : function(event, ui) {
+            return false;
+        },
+        minLength: 1,
+        autoFocus: true,
+        classes: {
+            "ui-autocomplete": "highlight"
+        }
+        //delay: 500,
+        //disabled: true,
+        //position: { my : "right top", at: "right bottom" },
+        //close : function(event){
+        //console.log(event);
+        //}
+        });
 
+        $( "#searchBar2" ).autocomplete({
+          source: availableTags,
+          select : function(event, ui) {
+            console.log(ui.item);
+        },
+        focus : function(event, ui) {
+            return false;
+        },
+        minLength: 1,
+        autoFocus: true,
+        classes: {
+            "ui-autocomplete": "highlight"
+        }
+    });
+    } );
+    </script>
+</head>
 <body>
     <div class="container">
         <header>
@@ -39,7 +89,7 @@
                         <td class = "headerTitleSt" data-th="출발역">
                             <div class="wrap">
                                 <div class="search">
-                                   <input type="text" class="searchTerm">
+                                   <input type="text" id="searchBar1" class="searchTerm">
                                    <button type="submit" class="searchButton">
                                      <i class="fa fa-search"></i>
                                   </button>
@@ -49,7 +99,7 @@
                         <td class = "headerTitleSt" data-th="도착역">
                             <div class="wrap">
                                 <div class="search">
-                                   <input type="text" class="searchTerm">
+                                   <input type="text" id="searchBar2" class="searchTerm">
                                    <button type="submit" class="searchButton">
                                      <i class="fa fa-search"></i>
                                   </button>
@@ -81,10 +131,9 @@
         </main>
     </div>
 
-    
     <script type="text/javascript">
         var date = new Date();
-        var timezonedate = new Date(date.toISOString().replace("Z", "-09:00")).toISOString();
+        var timezonedate = new Date(date.toISOString().replace("Z", "-09:00")).toISOString().substring(0,19);
         document.getElementById('timepicker').value = timezonedate;;
         $('#timepicker').mdtimepicker({
             // format of the time value (data-time attribute)
@@ -101,24 +150,8 @@
             // determines if clear button is visible 
             clearBtn:false
         });
-        
-        $('#timepicker2').mdtimepicker({
-            // format of the time value (data-time attribute)
-            timeFormat:'hh:mm:ss.000',
-            // format of the input value
-            format:'h:mm tt',     
-            // theme of the timepicker
-            // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
-            theme:'blue',
-            // determines if input is readonly
-            readOnly:true,      
-            // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
-            hourPadding:false,
-            // determines if clear button is visible 
-            clearBtn:false
-        });
-    </script>
+
+    </script> 
 </body>
 
 </html>
-
