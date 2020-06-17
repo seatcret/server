@@ -29,7 +29,7 @@
 <ul>
     {% for train in trains %}
     <li>
-        <a href="{{ url_for('train', subway_id=train.subway_id, train_id=train.id) }}">{{ train.id }}번 열차</a>:
+        <a href="{{ url_for('train', subway_id=train.subway_id, train_id=train.number) }}">{{ train.number }}번 열차</a>:
         {{ train.station_name }} (종착역: {{ train.terminal_station_name }})
     </li>
     {% endfor %}
