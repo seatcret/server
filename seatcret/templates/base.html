@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='mdtimepicker.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="/static/mdtimepicker.js"></script>
     <title>지하철 Seat크릿!</title>
@@ -28,7 +31,8 @@
                             <input type="text" id="timepicker" class = "floating-label"/>
                         </td>
                         <!-- <td class = "headerTitle">도착예정시간</td> -->
-                        <td class = "headerTitleTime" data-th="도착예정시간"><input type="text" id="timepicker2" class = "floating-label"/></td>
+                        <td class = "headerTitleTime" data-th="도착예정시간">
+                            <input type="text" id="timepicker2" class = "floating-label"/></td>
                     </tr>
                     
                     <tr class = "headerTr">
@@ -79,11 +83,14 @@
 
     
     <script type="text/javascript">
+        var date = new Date();
+        var timezonedate = new Date(date.toISOString().replace("Z", "-09:00")).toISOString();
+        document.getElementById('timepicker').value = timezonedate;;
         $('#timepicker').mdtimepicker({
             // format of the time value (data-time attribute)
             timeFormat:'hh:mm:ss.000',
             // format of the input value
-            format:'h:mm tt',     
+            format:'h:mm tt',
             // theme of the timepicker
             // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
             theme:'blue',       
