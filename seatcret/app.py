@@ -86,10 +86,11 @@ def train(subway_id: str, train_id: str):
     for key, user_id in seats.items():
         used_car_number, used_seat_number = key.split('-')
         itinerary = get_itinerary(user_id)
-        path = find_path(
-            train.station_id, itinerary['destination_id'], train.direction)
-        if path:
-            eta[key] = len(path) - 1
+        if itinerary:
+            path = find_path(
+                train.station_id, itinerary['destination_id'], train.direction)
+            if path:
+                eta[key] = len(path) - 1
 
     return render_template('train.html', train=train, seats=seats, eta=eta)
 
