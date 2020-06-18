@@ -58,10 +58,11 @@ def delete_seat(subway_id, train_id, car_number, seat_number) -> int:
 
 def delete_itinerary(user_id: str):
     itinerary = get_itinerary(user_id)
-    redis.delete(f"itinerary:{user_id}")
-    if itinerary['seated'] == 'true':
-        delete_seat(itinerary['subway_id'], itinerary['train_id'],
-                    itinerary['car_number'], itinerary['seat_number'])
+    if itinerary:
+        if itinerary['seated'] == 'true':
+            delete_seat(itinerary['subway_id'], itinerary['train_id'],
+                        itinerary['car_number'], itinerary['seat_number'])
+        redis.delete(f"itinerary:{user_id}")
 
 
 def get_user(user_id: str) -> dict:
